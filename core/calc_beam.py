@@ -1,13 +1,10 @@
 
 
 """
-Beam calculation functions for V1.
+Beam calculation functions for Version 1.
 
-We assume:
-- Simply supported beam
-- Uniformly distributed load (kN/m)
-- Steel IPE section (properties from sections.py)
-- Linear elastic behavior
+I assume that the beam is simply supported, with a uniformly distributed load, and that we are using a steel IPE section. 
+The behavior is linear elastic and we check both strength and deflection criteria. 
 
 All units inside the calculations:
 - Length: m
@@ -44,8 +41,7 @@ def max_bending_moment_uniform(span_m: float, w_kN_per_m: float) -> float:
         span_m (float): L span in meters
         w_kN_per_m (float): uniform load in kN/m
 
-    Returns:
-        float: M_Ed in [Nm]
+    It returns the float M_Ed in [Nm]
     """
     w_N_per_m = w_kN_per_m * 1e3  # kN/m → N/m
     M_ed = w_N_per_m * span_m**2 / 8.0
@@ -60,8 +56,7 @@ def bending_resistance_MRd(W_m3: float, fy_Pa: float) -> float:
         W_m3 (float): section modulus [m3]
         fy_Pa (float): yield strength [Pa]
 
-    Returns:
-        float: M_Rd in [Nm]
+    It returns the float  M_Rd in [Nm]
     """
     M_rd = W_m3 * fy_Pa / GAMMA_M
     return M_rd
@@ -78,8 +73,7 @@ def max_deflection_uniform(span_m: float, w_kN_per_m: float, I_m4: float) -> flo
         w_kN_per_m (float): uniform load in kN/m
         I_m4 (float): second moment of area [m4]
 
-    Returns:
-        float: deflection delta in [m]
+    It returns the float deflection delta in [m]
     """
     w_N_per_m = w_kN_per_m * 1e3  # kN/m → N/m
     delta = 5 * w_N_per_m * span_m**4 / (384 * E_STEEL * I_m4)
@@ -92,10 +86,9 @@ def deflection_limit(span_m: float, ratio: float = 250.0) -> float:
 
     Parameters:
         span_m (float): span in meters
-        ratio (float): e.g. 250 means L/250
+        ratio (float): for example 250 means L/250
 
-    Returns:
-        float: allowable deflection in [m]
+    It returns the float allowable deflection in [m]
     """
     return span_m / ratio
 
@@ -107,7 +100,7 @@ def check_beam_safety(
     steel_grade: str,
 ) -> dict:
     """
-    High-level function: check beam safety and deflection for one IPE section.
+    checks beam safety and deflection for one IPE section.
 
     Inputs:
         span_m:       span [m]
@@ -115,8 +108,7 @@ def check_beam_safety(
         profile_name: e.g. "IPE 300", must exist in materials.csv
         steel_grade:  "S235", "S275", or "S355"
 
-    Returns:
-        dict with internal forces, resistances, deflections, utilizations, and safety flag.
+    It returns the dict with internal forces, resistances, deflections, utilizations, and safety flag.
     """
 
     # 1) Get section properties from your CSV via sections.py
@@ -164,10 +156,10 @@ def check_beam_safety(
 
 
 if __name__ == "__main__":
-    # Small test so you can run: python core/calc_beam.py
+    # Small test so we can run: calc_beam.py
     span = 12.0
     w = 15.0  # kN/m (example)
-    profile = "IPE 750 x 220"  # must exist in your CSV
+    profile = "IPE 750 x 220"  # must exist in 12your CSV
     grade = "S355"
 
     result = check_beam_safety(span, w, profile, grade)
