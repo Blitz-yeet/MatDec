@@ -8,9 +8,9 @@ from core.deflection import max_deflection_simply_supported
 
 
 def main() -> None:
-    # ------------------------------------------------------------
-    # 1) Problem definition
-    # ------------------------------------------------------------
+   
+    # Problem definition
+   
     span = 6.0  # beam span [m]
 
     # Design loads (ULS for bending) – already factored in V1
@@ -21,9 +21,9 @@ def main() -> None:
     q_SLS = 15.0   # kN/m
     P_SLS = 30.0   # kN
 
-    # ------------------------------------------------------------
+   
     # 2) Structural analysis (ULS)
-    # ------------------------------------------------------------
+   
     lc = LoadCase(
         name="ULS",
         span_m=span,
@@ -41,9 +41,9 @@ def main() -> None:
     print(f"RA           = {res['RA_kN']:.2f} kN")
     print(f"RB           = {res['RB_kN']:.2f} kN")
 
-    # ------------------------------------------------------------
+   
     # 3) Candidate evaluation (capacity + deflection + CO2)
-    # ------------------------------------------------------------
+   
 
     # Resolve data path relative to this file (Version1/)
     base_dir = Path(__file__).resolve().parent
@@ -91,9 +91,9 @@ def main() -> None:
             }
         )
 
-    # ------------------------------------------------------------
+   
     # 4) Filter + optimization
-    # ------------------------------------------------------------
+   
     passing = [
         c
         for c in candidates
@@ -111,9 +111,9 @@ def main() -> None:
             f"CO₂ = {c['co2_kg']:7.1f} kg"
         )
 
-    # ------------------------------------------------------------
+   
     # 5) Decision
-    # ------------------------------------------------------------
+   
     if not passing_sorted:
         print("\nNo section satisfies bending + deflection requirements.")
     else:
