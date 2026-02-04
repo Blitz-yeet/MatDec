@@ -1,3 +1,5 @@
+# core/sections.py
+
 import csv
 from pathlib import Path
 
